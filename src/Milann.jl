@@ -7,7 +7,7 @@ using Statistics
 
 # This implemens a MIL version where the bag instances are stored in a continuous tensor and bags are delimited by ranges. 
 
-export RangeMIL, segmax, segmean, segmax_naive, segmean_naive
+export RangeMIL, segmax, segmean, segmax_naive, segmean_naive, segmaxmean
 
 struct RangeMIL
     premodel
@@ -163,5 +163,12 @@ Segmented mean: naive reference implementation using default AD.
 function segmean_naive(X, segments)
     hcat((mean(X[:,s], dims=ndims(X)) for s in segments)...)
 end
+
+"""
+    segmaxmean(X, segments)
+    
+Combine `segmax` and `segmean`.
+"""
+segmaxmean(X, segments) = vcat(segmax(X, segments), segmean(X, segments))
 
 end # module
